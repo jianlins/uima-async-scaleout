@@ -62,7 +62,7 @@
     <jiraVersion>12342746</jiraVersion> <!-- for 2.10.2AS -->  
     <uimaScmProject>${project.artifactId}</uimaScmProject>
     <assemblyFinalName>uima-as-${project.version}</assemblyFinalName> 
-    <additionalparam>-Xdoclint:none</additionalparam> 
+    <doclint>none</doclint>
   </properties>
   
   <!-- override pom setting in the build project. JIRA 5.1 needs different URL -->
@@ -224,17 +224,10 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.4</version>
         <executions>
-          <execution>
-            <id>default-cli</id>
-            <configuration>
-              <descriptors>
-                <descriptor>do-not-use--mvn-assembly-assembly--instead-use-mvn-install</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
+
           <execution>
             <id>uima-distr</id>
-            <phase>integration-test</phase>
+            <phase>package</phase>
             <goals>
               <goal>single</goal>
             </goals>
@@ -355,7 +348,7 @@
 		      <goal>javadoc</goal>
 		  </goals>
 		  <configuration>
-		     <additionalparam>-Xdoclint:none</additionalparam>
+		     <doclint>none</doclint>
                       <quiet>true</quiet>
                       <failOnError>false</failOnError>
                       <source>8</source>
@@ -372,26 +365,27 @@
                       <subpackages>org.apache.uima</subpackages>
 		      <excludePackageNames>*.aae.*:org.apache.uima.resourceSpecifier.*</excludePackageNames>
 		      <!-- add a few classes in impl packages that are directly used by user code -->
-                      <additionalparam>
-                          ${javadoc.opts}
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/jmx/monitor/BasicUimaJmxMonitorListener.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/jmx/monitor/JmxMonitorListener.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/jmx/monitor/ServiceMetrics.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/jmx/monitor/SingleLineUimaJmxMonitorListener.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/monitor/statistics/AnalysisEnginePerformanceMetrics.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/client/UimaAsynchronousEngine.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/client/UimaAsBaseCallbackListener.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/client/UimaASStatusCallbackListener.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/client/UimaASProcessStatus.java                                                                                     
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/error/ErrorResult.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/error/ErrorResultComponentPath.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/error/ErrorResultTDs.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/resourceSpecifier/factory/DeploymentDescriptorFactory.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/resourceSpecifier/factory/UimaASPrimitiveDeploymentDescriptor.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/resourceSpecifier/factory/UimaASAggregateDeploymentDescriptor.java
-                          ${basedir}/uimaj-as-core/src/main/java/org/apache/uima/resourceSpecifier/factory/ServiceContext.java
-                      </additionalparam>
-                      <!--  Link these to the uimaj javadocs on apache.org -->
+              <additionalOptions>
+                  <additionalOption>${javadoc.opts}</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/jmx/monitor/BasicUimaJmxMonitorListener.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/jmx/monitor/JmxMonitorListener.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/jmx/monitor/ServiceMetrics.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/jmx/monitor/SingleLineUimaJmxMonitorListener.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/monitor/statistics/AnalysisEnginePerformanceMetrics.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/client/UimaAsynchronousEngine.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/client/UimaAsBaseCallbackListener.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/client/UimaASStatusCallbackListener.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/client/UimaASProcessStatus.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/error/ErrorResult.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/error/ErrorResultComponentPath.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/aae/error/ErrorResultTDs.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/resourceSpecifier/factory/DeploymentDescriptorFactory.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/resourceSpecifier/factory/UimaASPrimitiveDeploymentDescriptor.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/resourceSpecifier/factory/UimaASAggregateDeploymentDescriptor.java</additionalOption>
+                  <additionalOption>${basedir}/uimaj-as-core/src/main/java/org/apache/uima/resourceSpecifier/factory/ServiceContext.java</additionalOption>
+              </additionalOptions>
+
+              <!--  Link these to the uimaj javadocs on apache.org -->
                       <links>
                           <link>http://uima.apache.org/d/uimaj-${uimajDependencyVersion}/apidocs</link>
                       </links>

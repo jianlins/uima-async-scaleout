@@ -55,8 +55,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.ActiveMQMessageConsumer;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.command.ActiveMQDestination;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.uima.UIMAFramework;
 import org.apache.uima.UIMA_IllegalStateException;
 import org.apache.uima.aae.UimaClassFactory;
@@ -890,7 +889,7 @@ public class TestUimaASExtended extends BaseTestSupport {
    */
     @Test
     public void testJmsServiceAdapter() throws Exception {
-	  LogManager.getLogger(this.getClass()).info("-------------- testJmsServiceAdapter -------------");
+	  Logger.getLogger(this.getClass()).info("-------------- testJmsServiceAdapter -------------");
 	  //setUp();
 	  BaseUIMAAsynchronousEngine_impl eeUimaEngine = new BaseUIMAAsynchronousEngine_impl();
     try {
@@ -911,7 +910,7 @@ public class TestUimaASExtended extends BaseTestSupport {
      */
       @Test
       public void testJmsServiceAdapterInAsyncAggregate() throws Exception {
-  	  LogManager.getLogger(this.getClass()).info("-------------- testJmsServiceAdapter -------------");
+  	  Logger.getLogger(this.getClass()).info("-------------- testJmsServiceAdapter -------------");
   	  //setUp();
   	  BaseUIMAAsynchronousEngine_impl eeUimaEngine = new BaseUIMAAsynchronousEngine_impl();
       try {

@@ -21,8 +21,21 @@ REM   under the License.
 @goto RUN
 
 :USAGE_UIMA
-@echo UIMA_HOME environment variable is not set 
-@goto EXIT
+@echo Setting UIMA_HOME based on current location...
+@set "CURRENT_PATH=%~dp0"
+@if "%CURRENT_PATH:~-4%"=="bin\" (
+    @for %%I in ("%~dp0..") do set "UIMA_HOME=%%~fI"
+    @cd /d ..
+) else (
+    @set "UIMA_HOME=%~dp0"
+)
+
+@echo Current working directory is:
+@cd
+
+
+@echo UIMA_HOME set to: %UIMA_HOME%
+@goto RUN
 
 :RUN
 
@@ -34,14 +47,19 @@ REM   under the License.
   set "ACTIVEMQ_HOME=%UIMA_HOME%\apache-activemq"
 )
 
+@echo ACTIVEMQ_HOME set to: %ACTIVEMQ_HOME%
+
 @REM  ActiveMQ needs a writable directory for the log files and derbydb
 @REM  watchout! it appears that ACTIVEMQ_BASE cannot contain backslashes!
 @if "%ACTIVEMQ_BASE%" == "" (
   set ACTIVEMQ_BASE=amq
 )
+@echo Set ACTIVEMQ_BASE to %ACTIVEMQ_BASE%
+
 
 @REM If directory missing create it
 @if not exist "%ACTIVEMQ_BASE%" (
+  @echo Create ACTIVEMQ_BASE to %ACTIVEMQ_BASE%
   mkdir "%ACTIVEMQ_BASE%"
   mkdir "%ACTIVEMQ_BASE%\conf"
 )
