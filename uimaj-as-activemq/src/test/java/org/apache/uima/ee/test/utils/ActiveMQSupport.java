@@ -49,7 +49,8 @@ import org.apache.activemq.usage.MemoryUsage;
 import org.apache.activemq.usage.SystemUsage;
 import org.apache.camel.Exchange;
 import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.uima.UIMAFramework;
 import org.apache.uima.adapter.jms.JmsConstants;
@@ -109,7 +110,7 @@ public class ActiveMQSupport extends TestCase {
     console.setThreshold(org.apache.log4j.Level.WARN);
     console.activateOptions();
     //add appender to any Logger (here is root)
-    Logger.getRootLogger().addAppender(console);
+    LogManager.getRootLogger().addAppender(console);
     */
     broker = createBroker();  // sets uri
     /*
@@ -200,7 +201,7 @@ public class ActiveMQSupport extends TestCase {
         } catch ( NoSuchMethodException e) {
           //  Ignore, this is not AMQ 5.2
         }
-        Logger.getRootLogger().info("Adding HTTP Connector:" + httpConnector.getConnectUri()+" Name:"+httpConnector.getName());
+        LogManager.getRootLogger().info("Adding HTTP Connector:" + httpConnector.getConnectUri()+" Name:"+httpConnector.getName());
         httpConnector.start();
         return httpConnector.getUri().toString();
       } catch ( BindException e) { 
@@ -290,7 +291,7 @@ public class ActiveMQSupport extends TestCase {
         BrokerFactory.createBroker(new URI("broker:()/" + hostName + "?persistent=false"));
       tcpConnector = addConnector(broker, "tcp",port);
       uri = tcpConnector.getUri().toString();
-      Logger.getRootLogger().info(">>>> Starting Broker With URL:" + uri);
+      LogManager.getRootLogger().info(">>>> Starting Broker With URL:" + uri);
       int defaultJMXPort = 1098;
       if ( secondaryBroker ) {
     	  if ( enableJMX ) {
@@ -350,8 +351,7 @@ public class ActiveMQSupport extends TestCase {
       if (tcpConnector != null) {
         tcpConnector.stop();
         broker.removeConnector(tcpConnector);
-        //Logger.getRootLogger().info(message);
-        Logger.getRootLogger().info("Broker Connector:" + tcpConnector.getUri().toString() + " is stopped");
+        LogManager.getRootLogger().info("Broker Connector:" + tcpConnector.getUri().toString() + " is stopped");
       }
       
       removeHttpConnector();

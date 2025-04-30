@@ -43,6 +43,7 @@ import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.ActiveMQMessageProducer;
 import org.apache.activemq.ActiveMQSession;
+import org.apache.activemq.transport.TransportListener;
 import org.apache.activemq.AsyncCallback;
 import org.apache.activemq.ConnectionFailedException;
 import org.apache.activemq.advisory.ConsumerEvent;
@@ -689,11 +690,14 @@ public class JmsEndpointConnection_impl implements ConsumerListener {
         logMessageSize(aMessage, msgSize, destinationName);
         synchronized (producer) {
             // create amq async callback listener to detect jms msg delivery problems
-        	AsyncCallback onComplete = createAMQCallbackListener(command, aMessage);
-        	// if the msg cannot be delivered due to invalid destination, the send does
+        	AsyncCallback onComplete = createAMQCallbackListener(command, aMessage);        	// if the msg cannot be delivered due to invalid destination, the send does
         	// not fail since we are using AMQ async sends. To detect delivery issues
         	// we use callback listener where such conditions are detected and handled
-        	((ActiveMQMessageProducer)producer).send((Destination) delegateEndpoint.getDestination(), aMessage, onComplete);
+        	((ActiveMQMessageProducer)producer).send((Destination) delegateEndpoint.getDestination(), aMessage, 
+                DeliveryMode.NON_PERSISTENT, 
+                aMessage.getJMSPriority(), 
+                aMessage.getJMSExpiration(), 
+                onComplete);
         }
       } else {
         destinationName = ((ActiveMQQueue) producer.getDestination()).getPhysicalName();
@@ -962,7 +966,6 @@ public class JmsEndpointConnection_impl implements ConsumerListener {
       controller.handleDelegateLifeCycleEvent(getEndpoint(), arg0.getConsumerCount());
     }
   }
-
   protected synchronized void finalize() throws Throwable {
 //    brokerDestinations.getConnectionTimer().stopTimer();
   }
@@ -977,6 +980,11 @@ public class JmsEndpointConnection_impl implements ConsumerListener {
 	public UimaAsAsyncCallbackListener( CasStateEntry casState ) {
 		this.casState = casState;
 	}
+	
+	public void onSuccess() {
+		// No action needed on successful delivery
+	}
+	
 	public void onException(JMSException exception) {
 		if ( casState != null ) {
 			
@@ -1029,9 +1037,6 @@ public class JmsEndpointConnection_impl implements ConsumerListener {
 	                  "UIMAEE_service_delivery_exception_WARNING",new Object[] { controller.getComponentName(), exception} );
 
 		}
-	}
-
-	public void onSuccess() {
 	}
 	  
   }

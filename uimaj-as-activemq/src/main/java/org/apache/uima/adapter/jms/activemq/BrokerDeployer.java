@@ -28,6 +28,7 @@ import javax.management.MBeanServerFactory;
 import javax.management.ObjectName;
 
 import org.apache.activemq.broker.Broker;
+import org.apache.activemq.broker.BrokerFactory;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.broker.TransportConnector;
 import org.apache.activemq.broker.jmx.ManagementContext; //import org.apache.activemq.memory.UsageListener;
@@ -48,7 +49,6 @@ public class BrokerDeployer implements ApplicationListener {
   private static final int BASE_JMX_PORT = 1200;
 
   private static final int MAX_PORT_THRESHOLD = 200;
-
   private static BrokerService service = new BrokerService();
 
   private Object semaphore = new Object();

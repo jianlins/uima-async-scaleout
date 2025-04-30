@@ -471,8 +471,7 @@ public class BaseUIMAAsynchronousEngine_impl extends BaseUIMAAsynchronousEngineC
 		// This only effects Consumer
 		// Create AMQ specific connection validator. It uses
 		// AMQ specific approach to test the state of the connection
-		ActiveMQConnectionValidator connectionValidator = new ActiveMQConnectionValidator();
-		//Initalize the connection Factory
+		ActiveMQConnectionValidator connectionValidator = new ActiveMQConnectionValidator();		//Initalize the connection Factory
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(aBrokerURI);
 		connectionFactory.setTrustAllPackages(true);
 		connectionFactory.setUserName(amqUser);
@@ -575,12 +574,10 @@ public class BaseUIMAAsynchronousEngine_impl extends BaseUIMAAsynchronousEngineC
 			perBrokerSemaphore.release();
 		}
 		return sharedConnection;
-	}
-
-  private void addPrefetch(ActiveMQConnection aConnection) {
+	}  private void addPrefetch(ActiveMQConnection aConnection) {
     ActiveMQPrefetchPolicy prefetchPolicy = new ActiveMQPrefetchPolicy();
     prefetchPolicy.setQueuePrefetch(5);
-    ((ActiveMQConnection) aConnection).setPrefetchPolicy(prefetchPolicy);
+    aConnection.setPrefetchPolicy(prefetchPolicy);
   }
 
   protected SharedConnection validateConnection(String aBrokerURI) throws Exception {

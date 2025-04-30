@@ -119,7 +119,8 @@
 				<include>com.thoughtworks.xstream:xstream</include>
 				<include>xmlpull:xmlpull</include>
 				<include>org.apache.geronimo.specs:geronimo-servlet_3.0_spec</include>
-				<include>log4j:log4j</include>
+				<include>org.apache.logging.log4j:log4j-core</include>
+				<include>org.apache.logging.log4j:log4j-api</include>
 				<include>xpp3:xpp3</include>
 				<include>org.apache.httpcomponents:httpclient</include>
 				<include>org.apache.httpcomponents:httpcore</include>

@@ -114,7 +114,6 @@ public class SpringContainerDeployer implements ControllerCallbackListener {
     }
     return connector;
   }
-
   private ActiveMQConnectionFactory getTopLevelQueueConnectionFactory(ApplicationContext ctx) {
     ActiveMQConnectionFactory factory = null;
     String[] inputChannelBeanIds = ctx
@@ -129,12 +128,15 @@ public class SpringContainerDeployer implements ControllerCallbackListener {
           } catch (Exception e) {
           }
         }
+        // Ensure proper package trust settings for ActiveMQ 6.1.6
+        if (factory != null) {
+          factory.setTrustAllPackages(true);
+        }
         break;
       }
     }
     return factory;
   }
-
   private ActiveMQPrefetchPolicy getPrefetchPolicy(int aPrefetchSize) {
     ActiveMQPrefetchPolicy prefetchPolicy = new ActiveMQPrefetchPolicy();
     prefetchPolicy.setQueuePrefetch(aPrefetchSize);
@@ -147,6 +149,7 @@ public class SpringContainerDeployer implements ControllerCallbackListener {
     if (factory != null) {
       String brokerURL = factory.getBrokerURL();
       factory = new ActiveMQConnectionFactory(brokerURL);
+      factory.setTrustAllPackages(true);
     }
     return factory;
   }

@@ -28,7 +28,7 @@
   <parent>
     <groupId>org.apache.uima</groupId>
     <artifactId>uima-as-parent</artifactId>
-    <version>2.10.4-SNAPSHOT</version>
+    <version>2.11.0-SNAPSHOT</version>
     <relativePath>uima-as-parent/pom.xml</relativePath>
   </parent>
 
@@ -92,26 +92,26 @@
       <artifactId>uimaj-as-jms</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.uima</groupId>
-      <artifactId>uimaj-as-camel</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.uima</groupId>
-      <artifactId>uimaj-ep-deployeditor</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.uima</groupId>
-      <artifactId>uimaj-ep-runtime-deployeditor</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.uima</groupId>
-      <artifactId>uimaj-as-osgi-runtime</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.apache.uima</groupId>-->
+<!--      <artifactId>uimaj-as-camel</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.apache.uima</groupId>-->
+<!--      <artifactId>uimaj-ep-deployeditor</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.apache.uima</groupId>-->
+<!--      <artifactId>uimaj-ep-runtime-deployeditor</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.apache.uima</groupId>-->
+<!--      <artifactId>uimaj-as-osgi-runtime</artifactId>-->
+<!--      <version>${project.version}</version>-->
+<!--    </dependency>-->
     
     <dependency>
       <groupId>org.apache.uima</groupId>
@@ -445,8 +445,6 @@
                 <fixVersionIds>${jiraVersion}</fixVersionIds>
                 <component>Async Scaleout</component>
                 <columnNames>Type,Key,Status,Summary</columnNames>
-                <resolution>Fixed</resolution>
-                <status>Closed,Resolved</status>
                 <sortColumnNames>Type, Status, Key DESC</sortColumnNames>
                 <outputDirectory>${basedir}/issuesFixed/</outputDirectory>
                 <maxEntries>1000</maxEntries> 
@@ -532,7 +530,7 @@
         <!-- depends on having -DjiraVersion set -->
           <plugin>
             <artifactId>maven-changes-plugin</artifactId>
-            <version>2.8</version>
+            <version>3.0.0-M2</version>
             <executions>
               <execution>
                 <id>default-cli</id>
