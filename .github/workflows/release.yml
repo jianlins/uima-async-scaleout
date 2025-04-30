@@ -168,7 +168,7 @@ jobs:
             mvn clean package -Dmaven.test.skip=true -DskipTests -X -U
           else
             echo "Running Maven build without debug flags"
-            mvn clean package -Dmaven.test.skip=true -DskipTests
+            mvn clean package
           fi
 
       - name: List generated packages
