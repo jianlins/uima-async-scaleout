@@ -9,6 +9,7 @@ on:
         description: 'Release tag to upload artifacts to (e.g., v2.11.0)'
         required: true
         type: string
+        default: "2.11.0"
 
 jobs:
   build:
