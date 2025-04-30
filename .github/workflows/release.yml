@@ -27,6 +27,50 @@ jobs:
           java-version: '8'
           distribution: 'temurin'
           cache: maven
+          server-id: central
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+
+      - name: Set up Maven Settings
+        run: |
+          mkdir -p $HOME/.m2
+          cat > $HOME/.m2/settings.xml << EOF
+          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                              https://maven.apache.org/xsd/settings-1.0.0.xsd">
+            <profiles>
+              <profile>
+                <id>default</id>
+                <repositories>
+                  <repository>
+                    <id>central</id>
+                    <url>https://repo1.maven.org/maven2</url>
+                    <releases>
+                      <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                      <enabled>false</enabled>
+                    </snapshots>
+                  </repository>
+                  <repository>
+                    <id>eclipse-releases</id>
+                    <url>https://repo.eclipse.org/content/groups/releases/</url>
+                    <releases>
+                      <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                      <enabled>false</enabled>
+                    </snapshots>
+                  </repository>
+                </repositories>
+              </profile>
+            </profiles>
+            <activeProfiles>
+              <activeProfile>default</activeProfile>
+            </activeProfiles>
+          </settings>
+          EOF
 
       - name: Setup Maven Toolchains
         run: |
@@ -62,8 +106,17 @@ jobs:
           RELEASE_VERSION="${RELEASE_VERSION#v}"
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
 
+      - name: Debug Maven Settings
+        run: |
+          echo "=== Maven Home ==="
+          mvn -version
+          echo "=== Maven Effective Settings ==="
+          mvn help:effective-settings
+          echo "=== Maven Dependency Tree ==="
+          mvn dependency:tree -Dverbose
+
       - name: Build with Maven
-        run: mvn clean package
+        run: mvn clean package -X -U
 
       - name: List generated packages
         run: |
