@@ -34,6 +34,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.jms.JMSSecurityException;
 
+import org.apache.activemq.broker.BrokerService;
+import org.apache.activemq.broker.TransportConnector;
 import org.apache.uima.UIMAFramework;
 import org.apache.uima.aae.client.UimaAsBaseCallbackListener;
 import org.apache.uima.aae.client.UimaAsynchronousEngine;
