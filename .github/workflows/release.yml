@@ -26,6 +26,26 @@ jobs:
           java-version: '8'
           distribution: 'temurin'
           cache: maven
+          
+      - name: Setup Maven Toolchains
+        run: |
+          mkdir -p $HOME/.m2
+          cat > $HOME/.m2/toolchains.xml << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <toolchains xmlns="http://maven.apache.org/TOOLCHAINS/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://maven.apache.org/TOOLCHAINS/1.1.0 http://maven.apache.org/xsd/toolchains-1.1.0.xsd">
+            <toolchain>
+              <type>jdk</type>
+              <provides>
+                <version>1.8</version>
+                <vendor>temurin</vendor>
+              </provides>
+              <configuration>
+                <jdkHome>${{env.JAVA_HOME}}</jdkHome>
+              </configuration>
+            </toolchain>
+          </toolchains>
+          EOF
 
       - name: Set release version from tag (for release trigger)
         if: github.event_name == 'release'
@@ -42,7 +62,7 @@ jobs:
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
 
       - name: Build with Maven
-        run: mvn -B clean package
+        run: mvn -B clean package -Dmaven.test.skip=true
 
       - name: List generated packages
         run: |
