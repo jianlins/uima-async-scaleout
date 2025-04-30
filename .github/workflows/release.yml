@@ -10,6 +10,11 @@ on:
         required: true
         type: string
         default: "2.11.0"
+      debug:
+        description: 'Enable debug mode for Maven build'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -140,23 +145,31 @@ jobs:
           RELEASE_VERSION="${RELEASE_VERSION#v}"
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
 
-      - name: Debug Maven Settings
-        run: |
-          echo "=== Maven Home ==="
-          mvn -version
-          echo "=== Maven Effective Settings ==="
-          mvn help:effective-settings
-
       - name: Install Jetty Dependency
         run: |
-          echo "=== Installing Jetty Dependency Directly ==="
           mkdir -p ~/.m2/repository/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/
           wget -q https://repo1.maven.org/maven2/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/jetty-all-9.4.57.v20241219-uber.jar -O ~/.m2/repository/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/jetty-all-9.4.57.v20241219.jar
           wget -q https://repo1.maven.org/maven2/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/jetty-all-9.4.57.v20241219.pom -O ~/.m2/repository/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/jetty-all-9.4.57.v20241219.pom
-          ls -la ~/.m2/repository/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/
+          
+      - name: Debug Maven Configuration (if debug enabled)
+        if: github.event.inputs.debug == 'true'
+        run: |
+          echo "==== Maven Version ===="
+          mvn -version
+          echo "==== Maven Effective Settings ===="
+          mvn help:effective-settings
+          echo "==== Maven Dependency Tree ===="
+          mvn dependency:tree -Dverbose
 
       - name: Build with Maven
-        run: mvn clean package -Dmaven.test.skip=true -DskipTests -DskipITs -X -U
+        run: |
+          if [ "${{ github.event.inputs.debug }}" == "true" ]; then
+            echo "Running Maven build with debug flags"
+            mvn clean package -Dmaven.test.skip=true -DskipTests -X -U
+          else
+            echo "Running Maven build without debug flags"
+            mvn clean package -Dmaven.test.skip=true -DskipTests
+          fi
 
       - name: List generated packages
         run: |
