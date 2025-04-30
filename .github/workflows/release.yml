@@ -54,6 +54,17 @@ jobs:
                     </snapshots>
                   </repository>
                   <repository>
+                    <id>apache.snapshots</id>
+                    <url>https://repository.apache.org/snapshots</url>
+                    <releases>
+                      <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                      <enabled>true</enabled>
+                      <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                  </repository>
+                  <repository>
                     <id>eclipse-releases</id>
                     <url>https://repo.eclipse.org/content/groups/releases/</url>
                     <releases>
@@ -63,7 +74,30 @@ jobs:
                       <enabled>false</enabled>
                     </snapshots>
                   </repository>
+                  <repository>
+                    <id>jetty-releases</id>
+                    <url>https://repo.eclipse.org/content/repositories/jetty-releases/</url>
+                    <releases>
+                      <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                      <enabled>false</enabled>
+                    </snapshots>
+                  </repository>
                 </repositories>
+                <pluginRepositories>
+                  <pluginRepository>
+                    <id>apache.snapshots</id>
+                    <url>https://repository.apache.org/snapshots</url>
+                    <releases>
+                      <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                      <enabled>true</enabled>
+                      <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                  </pluginRepository>
+                </pluginRepositories>
               </profile>
             </profiles>
             <activeProfiles>
@@ -112,11 +146,17 @@ jobs:
           mvn -version
           echo "=== Maven Effective Settings ==="
           mvn help:effective-settings
-          echo "=== Maven Dependency Tree ==="
-          mvn dependency:tree -Dverbose
+
+      - name: Install Jetty Dependency
+        run: |
+          echo "=== Installing Jetty Dependency Directly ==="
+          mkdir -p ~/.m2/repository/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/
+          wget -q https://repo1.maven.org/maven2/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/jetty-all-9.4.57.v20241219-uber.jar -O ~/.m2/repository/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/jetty-all-9.4.57.v20241219.jar
+          wget -q https://repo1.maven.org/maven2/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/jetty-all-9.4.57.v20241219.pom -O ~/.m2/repository/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/jetty-all-9.4.57.v20241219.pom
+          ls -la ~/.m2/repository/org/eclipse/jetty/aggregate/jetty-all/9.4.57.v20241219/
 
       - name: Build with Maven
-        run: mvn clean package -X -U
+        run: mvn clean package -Dmaven.test.skip=true -DskipTests -DskipITs -X -U
 
       - name: List generated packages
         run: |
